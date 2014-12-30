@@ -8,7 +8,8 @@ tempDir="./GBGame";
 
 echo "my 7zip location is $my7zip";
 IFS=$'\n';
-romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g')); #get the rom names
+#get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
+romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g'));
 unset IFS;
 for name in "${romNames[@]}"; do echo "$name"; done
 numGoodDumps=${#romNames[@]};

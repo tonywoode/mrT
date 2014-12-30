@@ -33,9 +33,7 @@ if ! [[ -e $selectedCore ]] ; then #change this so we're checking for correct fi
 	exit;
 fi;
 
-echo "you've chosen:";
-echo $selectedCore;
-exit
+export libretroCore="$selectedCore";
 
 #cd $libretroDir; #CD-ing gives us just the dylib name, if we do /dir/*.dylib we get full path...
 

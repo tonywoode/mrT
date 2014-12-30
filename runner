@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. ./select_libretro_core;
+echo "HERE IT IS: $libretroCore";
+
+
+
+
