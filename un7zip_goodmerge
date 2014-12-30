@@ -1,0 +1,49 @@
+#!/bin/bash
+
+p7zip="/usr/local/Cellar/p7zip/9.20.1/lib/p7zip/7z";
+my7zip="/Volumes/BOOTCAMP/Games/Sega Games/Genesis Games/GoodGEN_3_GM/World Heroes.7z"
+librettoDir="/Users/twoode/Code/MrT/mrT/RetroArch/RetroArch.app/Contents/Resources/modules"
+retroarch="./RetroArch/RetroArch.app/Contents/MacOS/RetroArch"
+tempDir="./GBGame";
+
+echo "my 7zip location is $my7zip";
+IFS=$'\n';
+romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g')); #get the rom names
+unset IFS;
+for name in "${romNames[@]}"; do echo "$name"; done
+numGoodDumps=${#romNames[@]};
+
+if [[ numGoodDumps > 1 ]]; then
+	echo "[0] ABORT"
+	declare -i i=1
+	for entry in "${romNames[@]}"
+	do
+		echo "[$i]" "$entry"
+		((i = i + 1))
+	done
+	echo -n "Please enter the number of the archive you wish to restore (or 0 to abort): ";
+	read romNumber;
+	echo "you selected $romNumber";
+	if ! [[ $romNumber =~ ^[0-9]+$ ]] ; then	#on nix the regex may need 'single quoting'
+		echo "Invalid number";
+		exit; 
+	fi												
+	if [[ $romNumber == 0 ]]; then				#on nix the number 0 may need '0' 
+		echo "ABORTED";
+		exit;
+	fi
+	if [[ $romNumber<0 || $romNumber>numGoodDumps ]]; then
+		echo "Invalid archive number";			#input unrelated to options also aborts
+		exit;
+	fi
+	rom="${romNames[$romNumber-1]}";			#anything left is a real option, capture it
+	echo "Selected Rom: $rom";
+fi
+
+$p7zip e -y -o"$tempDir" "$my7zip" "$rom";
+pathToRom="$tempDir/$rom";
+"$retroarch" -- "$pathToRom" -L "$librettoDir"/genesis_plus_gx_libretro.dylib
+
+
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#A small test for if any kind of file or directory exists
+FILE=$1
+
+if [ -e $FILE ];
+then
+   echo "File $FILE exists."
+else
+   echo "File $FILE does not exist."
+fi
