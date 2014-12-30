@@ -2,7 +2,7 @@
 
 p7zip="/usr/local/Cellar/p7zip/9.20.1/lib/p7zip/7z";
 my7zip="/Volumes/BOOTCAMP/Games/Sega Games/Genesis Games/GoodGEN_3_GM/World Heroes.7z"
-librettoDir="/Users/twoode/Code/MrT/mrT/RetroArch/RetroArch.app/Contents/Resources/modules"
+libretroDir="/Users/twoode/Code/MrT/mrT/RetroArch/RetroArch.app/Contents/Resources/modules"
 retroarch="./RetroArch/RetroArch.app/Contents/MacOS/RetroArch"
 tempDir="./GBGame";
 
@@ -21,7 +21,7 @@ if [[ numGoodDumps > 1 ]]; then
 		echo "[$i]" "$entry"
 		((i = i + 1))
 	done
-	echo -n "Please enter the number of the archive you wish to restore (or 0 to abort): ";
+	echo -n "Please enter the number of the rom you wish to play (or 0 to abort): ";
 	read romNumber;
 	echo "you selected $romNumber";
 	if ! [[ $romNumber =~ ^[0-9]+$ ]] ; then	#on nix the regex may need 'single quoting'
@@ -42,7 +42,7 @@ fi
 
 $p7zip e -y -o"$tempDir" "$my7zip" "$rom";
 pathToRom="$tempDir/$rom";
-"$retroarch" -- "$pathToRom" -L "$librettoDir"/genesis_plus_gx_libretro.dylib
+"$retroarch" -- "$pathToRom" -L "$libretroDir"/genesis_plus_gx_libretro.dylib
 
 
 
