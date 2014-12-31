@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Applescript lets us make the worlds easiest file browser...
+# http://apple.stackexchange.com/questions/158267/can-i-launch-the-file-save-open-dialog-from-the-command-line
+
+osascript -e 'tell application (path to frontmost application as text)
+set myFile to choose file
+POSIX path of myFile
+end'
+
+export selectedFile="$myFile"; # TODO: why won't this export?
