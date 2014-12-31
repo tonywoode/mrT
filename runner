@@ -1,7 +1,10 @@
 #!/bin/bash
-
+DIRNAME=$(dirname "$0")
+cd $DIRNAME;
 . ./select_libretro_core;
 echo "HERE IT IS: $libretroCore";
+. ./un7zip_goodmerge;
+
 
 
 
