@@ -16,12 +16,12 @@ numCores=${#infonames[@]};
 PS3="Select Core (0 to Quit, Enter to see options again)>";
 
 select choice in "${infonames[@]}"; do
-	if [[ $REPLY>0 && $REPLY<$numCores+1 ]]; then
+	if (( $REPLY>0 && $REPLY<$numCores+1 )); then
 		echo "you chose $choice";
 		selectedCoreInfo=${infoFilenames[$REPLY-1]};			
 		break;
 	fi;
-	if [[ $REPLY<=0 ]]; then exit; fi;
+	if (( $REPLY<=0 )); then exit; fi;
 	echo "Invalid Option Please choose again";
 done;
 

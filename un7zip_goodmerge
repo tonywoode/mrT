@@ -12,12 +12,12 @@ echo "Number of dumps is $numGoodDumps";
 
 PS3="Please enter the number of the rom you wish to play (or 0 to abort): "; #TODO zero to abort?
 select choice in "${romNames[@]}"; do
-	if [[ $REPLY>0 && $REPLY<$numGoodDumps+1 ]]; then #todo its not +1....
+	if (( $REPLY>0 && $REPLY<$numGoodDumps+1 )); then #todo its not +1....
 		echo "you chose $choice";
 		rom=${romNames[$REPLY-1]};			
 		break;
 	fi;
-	if [[ $REPLY<=0 ]]; then exit; fi;
+	if (( $REPLY<=0 )); then exit; fi;
 	echo "Invalid Option Please choose again";
 done;
 
