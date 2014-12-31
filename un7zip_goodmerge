@@ -7,37 +7,21 @@ IFS=$'\n';
 #get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
 romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g'));
 unset IFS;
-numGoodDumps=${#romNames[@]};
+numGoodDumps=${#romNames[@]}; ##TODO: its not - need to be explicit about 7zip option
 echo "Number of dumps is $numGoodDumps";
 
-if [[ $numGoodDumps > 1 ]]; then #TODO: use select instead
-	echo "[0] ABORT"
-	declare -i i=1
-	for entry in "${romNames[@]}"
-	do
-		echo "[$i]" "$entry"
-		((i = i + 1))
-	done
-	echo -n "Please enter the number of the rom you wish to play (or 0 to abort): ";
-	read romNumber;
-	echo "you selected $romNumber";
-	if ! [[ $romNumber =~ ^[0-9]+$ ]] ; then	#on nix the regex may need 'single quoting'
-		echo "Invalid number";
-		exit; 
-	fi												
-	if [[ $romNumber == 0 ]]; then				#on nix the number 0 may need '0' 
-		echo "ABORTED";
-		exit;
-	fi
-	if [[ $romNumber -lt 0 || $romNumber -gt $numGoodDumps ]]; then #TODO: arithmetic context please
-		echo "Invalid archive number";			#input unrelated to options also aborts
-		exit;
-	fi
-	rom="${romNames[$romNumber-1]}";			#anything left is a real option, capture it
-	echo "Selected Rom: $rom";
-fi
+PS3="Please enter the number of the rom you wish to play (or 0 to abort): "; #TODO zero to abort?
+select choice in "${romNames[@]}"; do
+	if [[ $REPLY>0 && $REPLY<$numGoodDumps+1 ]]; then #todo its not +1....
+		echo "you chose $choice";
+		rom=${romNames[$REPLY-1]};			
+		break;
+	fi;
+	if [[ $REPLY<=0 ]]; then exit; fi;
+	echo "Invalid Option Please choose again";
+done;
 
-$p7zip e -y -o"$tempDir" "$my7zip" "$rom";
+$p7zip e -y -o"$tempDir" "$my7zip" "$rom"; #TODO: if something goes wrong here, it extracts ALL files....
 export pathToRom="$tempDir/$rom";
 
 
