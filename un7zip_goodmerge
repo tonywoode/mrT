@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #Inherits environment from runner
+p7zip="$sevenZip";
 echo "my 7zip location is $my7zip";
 IFS=$'\n';
 #get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
 romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g'));
 unset IFS;
-for name in "${romNames[@]}"; do echo "$name"; done
 numGoodDumps=${#romNames[@]};
-echo "number of dumps is $numGoodDumps";
+echo "Number of dumps is $numGoodDumps";
 
 if [[ $numGoodDumps > 1 ]]; then #TODO: use select instead
 	echo "[0] ABORT"
