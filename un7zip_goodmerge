@@ -8,8 +8,9 @@ romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g')
 unset IFS;
 for name in "${romNames[@]}"; do echo "$name"; done
 numGoodDumps=${#romNames[@]};
+echo "number of dumps is $numGoodDumps";
 
-if [[ numGoodDumps > 1 ]]; then
+if [[ $numGoodDumps > 1 ]]; then #TODO: use select instead
 	echo "[0] ABORT"
 	declare -i i=1
 	for entry in "${romNames[@]}"
@@ -28,7 +29,7 @@ if [[ numGoodDumps > 1 ]]; then
 		echo "ABORTED";
 		exit;
 	fi
-	if [[ $romNumber<0 || $romNumber>numGoodDumps ]]; then
+	if [[ $romNumber -lt 0 || $romNumber -gt $numGoodDumps ]]; then #TODO: arithmetic context please
 		echo "Invalid archive number";			#input unrelated to options also aborts
 		exit;
 	fi
@@ -37,7 +38,7 @@ if [[ numGoodDumps > 1 ]]; then
 fi
 
 $p7zip e -y -o"$tempDir" "$my7zip" "$rom";
-pathToRom="$tempDir/$rom";
+export pathToRom="$tempDir/$rom";
 
 
 
