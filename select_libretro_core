@@ -25,6 +25,7 @@ select choice in "${infonames[@]}"; do
 	echo "Invalid Option Please choose again";
 done;
 
+
 #convert that info file into the dylib that should be there....
 selectedCore=${selectedCoreInfo%.*}.dylib;
 

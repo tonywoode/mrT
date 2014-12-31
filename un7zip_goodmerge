@@ -1,11 +1,6 @@
 #!/bin/bash
 
-p7zip="/usr/local/Cellar/p7zip/9.20.1/lib/p7zip/7z";
-my7zip="/Volumes/BOOTCAMP/Games/Sega Games/Genesis Games/GoodGEN_3_GM/World Heroes.7z"
-libretroDir="/Users/twoode/Code/MrT/mrT/RetroArch/RetroArch.app/Contents/Resources/modules"
-retroarch="./RetroArch/RetroArch.app/Contents/MacOS/RetroArch"
-tempDir="./GBGame";
-
+#Inherits environment from runner
 echo "my 7zip location is $my7zip";
 IFS=$'\n';
 #get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
@@ -43,7 +38,7 @@ fi
 
 $p7zip e -y -o"$tempDir" "$my7zip" "$rom";
 pathToRom="$tempDir/$rom";
-"$retroarch" -- "$pathToRom" -L "$libretroDir"/genesis_plus_gx_libretro.dylib
+
 
 
 
