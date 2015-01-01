@@ -6,17 +6,18 @@ cd "${BASH_SOURCE%/*}" || exit;
 selectedFile=$(. chooseFile);
 echo "Selected File: $selectedFile";
 
-. select_libretro_core;
-echo "Selected Core: $libretroCore";
-
 # TODO: we need to check if its a 7zip and if it is pass to goodmerge
 # echo "SELECTED FILE: $myFile"
 # if [[ ${myFile##*. }= .7zip]]; then
-# 	do
+
 my7zip="$selectedFile";
 echo "You selected this 7zip: $my7zip;"
 . un7zip_goodmerge;
 echo "Running this rom: $pathToRom";
+
+. select_libretro_core;
+echo "Selected Core: $libretroCore";
+
 retroarchCall() {
 	"$retroarch" -- "$pathToRom" -L "$libretroCore";
 }
