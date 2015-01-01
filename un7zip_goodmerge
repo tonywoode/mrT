@@ -7,31 +7,45 @@ IFS=$'\n';
 #get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
 romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g'));
 unset IFS;
+
 #get rid of that first element, its the path to the 7zip itself
 romNames=("${romNames[@]:1}");
 #now we have the correct number of items....
 numGoodDumps=${#romNames[@]};
 #now we add the all option to the head of the list
-romNames=("All of them (its not a goodmerged zip)" "${romNames[@]}");
-
-
-#We use the convenience that the first output from p7zip -l is the 7zip itself,
+all="Extract All Files";
 
 echo "Number of dumps is $numGoodDumps";
-
-PS3="Please enter the number of the rom you wish to play (or 0 to abort): "; #TODO zero to abort?
+PS3="Please enter the number of the rom to extract (0 aborts, "all" for $all): "; #TODO zero to abort?
+menu() {
 select choice in "${romNames[@]}"; do #the 1 slices the array, first entry is the 7zip itself
-	if (( $REPLY=1 )); then break; fi;
-	if (( $REPLY>0 && $REPLY<$numGoodDumps+1 )); then #+1 because we added option 1: whole zip
+	if [[ $REPLY = all ]]; then 
+		rom=$all		
+		break; 
+	fi;
+	if (( $REPLY>0 && $REPLY<=$numGoodDumps)); then
 		echo "you chose $choice";
-		rom=${romNames[$REPLY-1]}; #because menu is 1 based but array is zero based			
+		rom=$choice; #because menu is 1 based but array is zero based			
 		break;
 	fi;
+
 	if (( $REPLY<=0 )); then exit; fi;
 	echo "Invalid Option Please choose again";
 done;
+}
+menu;
+sevenZipCall() {
+if [[ $rom = $all ]]; then 
+		$p7zip e -y -o"$tempDir" "$my7zip" "${romNames[@]}" #if you want to extract all
+		PS3="which of those files to pass to emulator?"
+		menu;
+else
+	$p7zip e -y -o"$tempDir" "$my7zip" "$rom"; #TODO: if something goes wrong here, it extracts ALL files....
+fi
+}
 
-$p7zip e -y -o"$tempDir" "$my7zip" "$rom"; #TODO: if something goes wrong here, it extracts ALL files....
+sevenZipCall;
+
 export pathToRom="$tempDir/$rom";
 
 
