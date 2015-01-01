@@ -7,14 +7,24 @@ IFS=$'\n';
 #get the rom names.  -slt flag to p7zip seems to print them out in most usable fashion
 romNames=($($p7zip l -slt "$my7zip" | grep "Path =" | sed -e 's/^[Path = ]*//g'));
 unset IFS;
-numGoodDumps=${#romNames[@]}; ##TODO: its not - need to be explicit about 7zip option
+#get rid of that first element, its the path to the 7zip itself
+romNames=("${romNames[@]:1}");
+#now we have the correct number of items....
+numGoodDumps=${#romNames[@]};
+#now we add the all option to the head of the list
+romNames=("All of them (its not a goodmerged zip)" "${romNames[@]}");
+
+
+#We use the convenience that the first output from p7zip -l is the 7zip itself,
+
 echo "Number of dumps is $numGoodDumps";
 
 PS3="Please enter the number of the rom you wish to play (or 0 to abort): "; #TODO zero to abort?
-select choice in "${romNames[@]}"; do
-	if (( $REPLY>0 && $REPLY<$numGoodDumps+1 )); then #todo its not +1....
+select choice in "${romNames[@]}"; do #the 1 slices the array, first entry is the 7zip itself
+	if (( $REPLY=1 )); then break; fi;
+	if (( $REPLY>0 && $REPLY<$numGoodDumps+1 )); then #+1 because we added option 1: whole zip
 		echo "you chose $choice";
-		rom=${romNames[$REPLY-1]};			
+		rom=${romNames[$REPLY-1]}; #because menu is 1 based but array is zero based			
 		break;
 	fi;
 	if (( $REPLY<=0 )); then exit; fi;
