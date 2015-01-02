@@ -1,3 +1,8 @@
+# Usual mac stuff
 .DS_Store
+# RetroArch's own files
 RetroArch/*
+# My temp directory (named in honour of gamebase)
 GBGame/*
+# Mame Config file (gets created on first run of mame)
+cfg/
