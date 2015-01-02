@@ -1,40 +1,38 @@
 #!/bin/bash
 
 #let the user choose which core they want to load
-libretroDir="/Users/twoode/Code/MrT/mrT/RetroArch/RetroArch.app/Contents/Resources/modules"
-
 
 # get the names for the menu
-IFS=$'\n';
-infonames=($(grep -h "display_name" $libretroDir/*.info | sed -e 's/display_name = *//g'));
+
+IFS=$'\n'
+infonames=($(grep -h "display_name" $libretroDir/*.info | sed -e 's/display_name = *//g'))
 # match the menu names with an array of the actual info filepaths, we'll check those match to dylib files later
-infoFilenames=($(grep -l "display_name" $libretroDir/*.info | sed -e 's/display_name = *//g'));
-unset IFS;
+infoFilenames=($(grep -l "display_name" $libretroDir/*.info | sed -e 's/display_name = *//g'))
+unset IFS
 
-numCores=${#infonames[@]};
+numCores=${#infonames[@]}
 
-PS3="Select Core (0 to Quit, Enter to see options again)>";
+PS3="Select Core (0 to Quit, Enter to see options again)>"
 
 select choice in "${infonames[@]}"; do
 	if (( $REPLY>0 && $REPLY<$numCores+1 )); then
-		echo "you chose $choice";
-		selectedCoreInfo=${infoFilenames[$REPLY-1]};			
-		break;
-	fi;
-	if (( $REPLY<=0 )); then exit; fi;
-	echo "Invalid Option Please choose again";
-done;
-
+		echo "you chose $choice"
+		selectedCoreInfo=${infoFilenames[$REPLY-1]}			
+		break
+	fi
+	if (( $REPLY<=0 )); then exit; fi
+	echo "Invalid Option Please choose again"
+done
 
 #convert that info file into the dylib that should be there....
-selectedCore=${selectedCoreInfo%.*}.dylib;
+selectedCore=${selectedCoreInfo%.*}.dylib
 
 if ! [[ -e $selectedCore ]] ; then #change this so we're checking for correct filetype?
-	echo "there's a problem with that core's library file: /n $selectedCore";
-	exit;
-fi;
+	echo "there's a problem with that core's library file: /n $selectedCore"
+	exit
+fi
 
-export libretroCore="$selectedCore";
+export libretroCore="$selectedCore"
 
 #cd $libretroDir; #CD-ing gives us just the dylib name, if we do /dir/*.dylib we get full path...
 

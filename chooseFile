@@ -8,4 +8,4 @@ set myFile to choose file
 POSIX path of myFile
 end'
 
-export selectedFile="$myFile"; # TODO: why won't this export?
+export selectedFile="$myFile" # TODO: why won't this export?
