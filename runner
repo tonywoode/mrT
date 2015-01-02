@@ -1,5 +1,5 @@
 #!/bin/bash
-cd "${BASH_SOURCE%/*}" || exit
+#cd "${BASH_SOURCE%/*}" || exit
 
 osxExit() {
 	osascript -e 'tell application "Terminal" to close (every window whose name contains ".command")' &
@@ -26,9 +26,9 @@ chooseToUncompress() {
 	if [[ "$cf" == "n" ]]; then	 
 		pathToRom="$selectedFile" # If we aren't extracting pass directly to emu, don't bother with temp dir 
 	fi
-	if [[ "$cf" != "n" ]]; then	 
+	if [[ "$cf" != [yn] ]]; then	 
 		echo "Please respond with a [y/n]: "
-		getConfirm
+		chooseToUncompress
 	fi 
 } 	
 
@@ -43,7 +43,7 @@ retroarchCall() {
 if retroarchCall; then
 # http://stackoverflow.com/questions/8798641/close-terminal-window-from-within-shell-script-unix
 # http://stackoverflow.com/questions/5560167/how-should-i-properly-exit-terminal-using-a-terminal-command-on-mac-os-x
-osxExit
+platformExit
 fi
 echo "Can't start the emulator, sorry. I called this command:"
 echo "\"$retroarch\" -- \"$pathToRom\" -L \"$libretroCore\""
