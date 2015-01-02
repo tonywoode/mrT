@@ -6,14 +6,26 @@ cd "${BASH_SOURCE%/*}" || exit
 selectedFile=$(. chooseFile)
 echo "Selected File: $selectedFile"
 
-# TODO: we need to check if its a 7zip and if it is pass to goodmerge
-# echo "SELECTED FILE: $myFile"
-# if [[ ${myFile##*. }= .7zip]]; then
+chooseToUncompress() {
+	echo "And are we going to uncompress this file before passing to the emulator?"
+	read cf 										
+	cf=$(echo $cf | tr "[:upper:]" "[:lower:"])		# all lowercase
+	if [[ "$cf" == "y" ]]; then						
+		my7zip="$selectedFile"
+		echo "You selected this 7zip: $my7zip;"
+		. un7zip_goodmerge
+		echo "Running this rom: $pathToRom"
+	fi
+	if [[ "$cf" == "n" ]]; then	 
+		pathToRom="$selectedFile" # If we aren't extracting pass directly to emu, don't bother with temp dir 
+	fi
+	if [[ "$cf" != "n" ]]; then	 
+		echo "Please respond with a [y/n]: "
+		getConfirm
+	fi 
+} 	
 
-my7zip="$selectedFile"
-echo "You selected this 7zip: $my7zip;"
-. un7zip_goodmerge
-echo "Running this rom: $pathToRom"
+chooseToUncompress
 
 . select_libretro_core;
 echo "Selected Core: $libretroCore"
