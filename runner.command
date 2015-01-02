@@ -1,9 +1,16 @@
 #!/bin/bash
 cd "${BASH_SOURCE%/*}" || exit
 
+osxExit() {
+	osascript -e 'tell application "Terminal" to close (every window whose name contains ".command")' &
+	exit
+}
+
 . mrT.cfg
 
 selectedFile=$(. chooseFile)
+
+if ! [[ $selectedFile ]]; then osxExit; fi
 echo "Selected File: $selectedFile"
 
 chooseToUncompress() {
@@ -34,11 +41,9 @@ retroarchCall() {
 	"$retroarch" -- "$pathToRom" -L "$libretroCore"
 }
 if retroarchCall; then
-
 # http://stackoverflow.com/questions/8798641/close-terminal-window-from-within-shell-script-unix
 # http://stackoverflow.com/questions/5560167/how-should-i-properly-exit-terminal-using-a-terminal-command-on-mac-os-x
-osascript -e 'tell application "Terminal" to close (every window whose name contains ".command")' &
-exit
+osxExit
 fi
 echo "Can't start the emulator, sorry. I called this command:"
 echo "\"$retroarch\" -- \"$pathToRom\" -L \"$libretroCore\""
