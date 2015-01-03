@@ -6,3 +6,4 @@ RetroArch/*
 GBGame/*
 # Mame Config file (gets created on first run of mame)
 cfg/
+nvram/
