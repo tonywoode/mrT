@@ -29,7 +29,14 @@ if ! [[ $selectedFile ]]; then platformExit; fi
 echo "Selected File: $selectedFile"
 echo "extenstion: $extn"
 
-if [[ $extn == "zip" || $extn == "7z" || $extn == "tar" || $extn == "gz" || $extn == "bz2" ]]; then 
+if [[ 
+	   $extn == "zip" 
+	|| $extn == "7z" 
+	|| $extn == "tar" 
+	|| $extn == "gz" 
+	|| $extn == "bz2" 
+	#or if mimetype reports its an archive
+	|| $(file $selectedFile | grep archive) ]]; then 
 	chooseToUncompress
 else pathToRom="$selectedFile"
 fi
