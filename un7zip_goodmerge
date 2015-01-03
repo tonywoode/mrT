@@ -16,7 +16,7 @@ numGoodDumps=${#romNames[@]}
 all="Extract All Files"
 
 echo "Number of dumps is $numGoodDumps"
-PS3="Please enter the number of the rom to extract (0 aborts, "all" for $all): " #TODO zero to abort?
+
 menu() {
 	select choice in "${romNames[@]}"; do #the 1 slices the array, first entry is the 7zip itself
 		if [[ $REPLY = all ]]; then 
@@ -33,7 +33,11 @@ menu() {
 	done
 }
 
-menu
+if (( $numGoodDumps > 1 )); then
+	PS3="Please enter the number of the rom to extract (0 aborts, "all" for $all): " #TODO zero to abort?
+	menu
+else rom="${romNames[0]}"
+fi
 
 sevenZipCall() {
 	if [[ $rom = $all ]]; then 
