@@ -4,9 +4,7 @@
 . mrT.cfg
 
 selectedFile=$(chooseFile)
-
-if ! [[ $selectedFile ]]; then platformExit; fi
-echo "Selected File: $selectedFile"
+extn="${selectedFile##*.}"
 
 chooseToUncompress() {
 	echo "And are we going to uncompress this file before passing to the emulator?"
@@ -27,7 +25,14 @@ chooseToUncompress() {
 	fi 
 } 	
 
-chooseToUncompress
+if ! [[ $selectedFile ]]; then platformExit; fi
+echo "Selected File: $selectedFile"
+echo "extenstion: $extn"
+
+if [[ $extn == "zip" || $extn == "7z" || $extn == "tar" || $extn == "gz" || $extn == "bz2" ]]; then 
+	chooseToUncompress
+else pathToRom="$selectedFile"
+fi
 
 . select_libretro_core;
 echo "Selected Core: $libretroCore"
