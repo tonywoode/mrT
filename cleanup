@@ -1,11 +1,8 @@
 #!/bin/bash
 
 if [[ $filesToDelete ]]; then
-	for ind in "${filesToDelete[@]}"; do
-		echo "Deleting this file: $ind"
-		rm "$ind"
+	for unarchivedFile in "${filesToDelete[@]}"; do
+		echo "Deleting this file: $unarchivedFile"
+		rm "$unarchivedFile"
 	done
-elif [[ $fileToDeleteLater ]]; then
-	echo "Deleting this file: $fileToDeleteLater"
-	rm "$filesToDelete"
 fi

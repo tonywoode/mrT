@@ -48,14 +48,16 @@ retroarchCall() {
 	"$retroarch" -- "$pathToRom" -L "$libretroCore"
 }
 
-if retroarchCall; then
-	# http://stackoverflow.com/questions/8798641/close-terminal-window-from-within-shell-script-unix
-	# http://stackoverflow.com/questions/5560167/how-should-i-properly-exit-terminal-using-a-terminal-command-on-mac-os-x
-	. cleanup
-	platformExit
-fi
+startedEmulator=$(retroarchCall)
 . cleanup
-echo "Can't start the emulator, sorry. I called this command:"
-echo "\"$retroarch\" -- \"$pathToRom\" -L \"$libretroCore\""
+
+if [[ $startedEmulator ]]; then
+	platformExit
+else
+	echo "Can't start the emulator, sorry. I called this command:"
+	echo "\"$retroarch\" -- \"$pathToRom\" -L \"$libretroCore\""
+fi
+
+
 
 

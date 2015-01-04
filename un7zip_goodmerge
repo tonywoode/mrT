@@ -39,10 +39,12 @@ if (( $numRoms > 1 )); then
 else rom="${romNames[0]}"
 fi
 
+
+
 sevenZipCall() {
+filesToDelete=()
 	if [[ $rom = $all ]]; then #if you want to extract all
 		$p7zip e -y -o"$tempDir" "$my7zip" "${romNames[@]}"
-		filesToDelete=()
 		for oneOfTheFilesToDeleteLater in "${romNames[@]}"; do
 			filesToDelete+=("$tempDir/$oneOfTheFilesToDeleteLater")
 			done 
@@ -50,7 +52,7 @@ sevenZipCall() {
 		menu
 	else
 		$p7zip e -y -o"$tempDir" "$my7zip" "$rom" #TODO: if something goes wrong here, it extracts ALL files....
-		fileToDeleteLater="$tempDir/$rom"
+		filesToDelete=("$tempDir/$rom")
 	fi
 }
 
