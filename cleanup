@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $filesToDelete ]]; then
+	for ind in "${filesToDelete[@]}"; do
+		echo "Deleting this file: $ind"
+		rm "$ind"
+	done
+elif [[ $fileToDeleteLater ]]; then
+	echo "Deleting this file: $fileToDeleteLater"
+	rm "$filesToDelete"
+fi

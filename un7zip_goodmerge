@@ -11,11 +11,11 @@ unset IFS
 #get rid of that first element, its the path to the 7zip itself
 romNames=("${romNames[@]:1}")
 #now we have the correct number of items....
-numGoodDumps=${#romNames[@]}
+numRoms=${#romNames[@]}
 #now we add the all option to the head of the list
 all="Extract All Files"
 
-echo "Number of dumps is $numGoodDumps"
+echo "Number of dumps is $numRoms"
 
 menu() {
 	select choice in "${romNames[@]}"; do #the 1 slices the array, first entry is the 7zip itself
@@ -23,7 +23,7 @@ menu() {
 			rom=$all		
 			break 
 		fi
-		if (( $REPLY>0 && $REPLY<=$numGoodDumps)); then
+		if (( $REPLY>0 && $REPLY<=$numRoms)); then
 			echo "you chose $choice"
 			rom=$choice; #because menu is 1 based but array is zero based			
 			break
@@ -33,25 +33,30 @@ menu() {
 	done
 }
 
-if (( $numGoodDumps > 1 )); then
+if (( $numRoms > 1 )); then
 	PS3="Please enter the number of the rom to extract (0 aborts, "all" for $all): " #TODO zero to abort?
 	menu
 else rom="${romNames[0]}"
 fi
 
 sevenZipCall() {
-	if [[ $rom = $all ]]; then 
-		$p7zip e -y -o"$tempDir" "$my7zip" "${romNames[@]}" #if you want to extract all
+	if [[ $rom = $all ]]; then #if you want to extract all
+		$p7zip e -y -o"$tempDir" "$my7zip" "${romNames[@]}"
+		filesToDelete=()
+		for oneOfTheFilesToDeleteLater in "${romNames[@]}"; do
+			filesToDelete+=("$tempDir/$oneOfTheFilesToDeleteLater")
+			done 
 		PS3="which of those files to pass to emulator?"
 		menu
 	else
 		$p7zip e -y -o"$tempDir" "$my7zip" "$rom" #TODO: if something goes wrong here, it extracts ALL files....
+		fileToDeleteLater="$tempDir/$rom"
 	fi
 }
 
 sevenZipCall
 
-export pathToRom="$tempDir/$rom"
+pathToRom="$tempDir/$rom"
 
 
 
