@@ -48,13 +48,18 @@ retroarchCall() {
 	"$retroarch" -- "$pathToRom" -L "$libretroCore"
 }
 
-startedEmulator=$(retroarchCall)
+retroarchCall
+emulatorExitCode=$?
+
+
 . cleanup
 
-if [[ $startedEmulator ]]; then
+if (( $emulatorExitCode==0 )); then
 	platformExit
 else
-	echo "Can't start the emulator, sorry. I called this command:"
+	echo "Can't start the emulator, sorry" 
+	echo "exit code was $emulatorExitCode"
+	echo "I called this command:"
 	echo "\"$retroarch\" -- \"$pathToRom\" -L \"$libretroCore\""
 fi
 
