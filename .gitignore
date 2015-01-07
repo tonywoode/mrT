@@ -7,3 +7,6 @@ GBGame/*
 # Mame Config file (gets created on first run of mame)
 cfg/
 nvram/
+#retroarch needs a system dir, set in its own config
+retroarch_system/
+
