@@ -30,4 +30,4 @@ On OSX, Run up osx.command, which will prompt you to first navigate to a file. I
 
 ## License
 
-Distributed under the BSD-3 License; see Package/bsd.txt
+Distributed under the BSD-3 License - see Package/bsd.txt
