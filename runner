@@ -3,6 +3,9 @@
 
 . mrT.cfg
 
+# We need a hack to get the config out - we can't start retroarch cleanly AND get a config file:
+$retroarch -- --verbose  2>>"temp_config"|| kill $(ps aux | grep "ReportCrash" | awk '{print $2;exit;}') 
+
 selectedFile=$(chooseFile)
 extn="${selectedFile##*.}"
 

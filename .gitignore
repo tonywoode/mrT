@@ -10,3 +10,6 @@ nvram/
 #retroarch needs a system dir, set in its own config
 retroarch_system/
 
+#we make a temp config file
+temp_config
+
